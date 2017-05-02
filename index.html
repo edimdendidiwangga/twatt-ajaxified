@@ -49,6 +49,7 @@
     });
     // timeline
     $('#linkTimeline').on('click', myTimeline());
+    
     function myTimeline(){
     axios.get('http://localhost:3000/timeline')
       .then(function(data) {
