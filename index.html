@@ -1,0 +1,69 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+  <h3>Data Search</h3>
+  <form id="target">
+  Search Tweets:<br>
+  <input type="text" name="search" id="searchInput">
+  <br>
+  <button type="submit" value="Submit">Search</button>
+  </form>
+  <ul id="search">
+
+  </ul>
+  <br>
+  <h3 id="linkTimeline"><a href="#">data my timeline</a></h3>
+  <ul id="timeline">
+
+  </ul>
+
+  <script>
+  $(document)
+  .ready(function() {
+    // search
+    $( "#target" ).submit(function( event ) {
+
+    let dataSearch = $('#searchInput').val();
+    console.log(dataSearch);
+    axios.get(`http://localhost:3000/search/${dataSearch}`)
+      .then(function(data) {
+        let statuses = data
+        console.log(statuses.data.statuses[0].text)
+        $.each(statuses.data.statuses, function(key, value) {
+          $("#search")
+            .append("<li>" + value.text + "</li>");
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+      event.preventDefault();
+    });
+    // timeline
+    $('#linkTimeline').on('click', myTimeline());
+    function myTimeline(){
+    axios.get('http://localhost:3000/timeline')
+      .then(function(data) {
+        let timeline = data
+        // console.log(timeline)
+        $.each(timeline.data, function(key, value) {
+          $("#timeline")
+            .append("<li>" + value.text + "</li>");
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    }
+  });
+  </script>
+</body>
+</html>
